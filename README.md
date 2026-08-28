@@ -38,23 +38,32 @@ flowchart LR
 
 ## 실행 방법
 1. 환경 변수 설정
+
+```bash
 export OPENAI_API_KEY=발급받은_OpenAI_API_키
 export SERPAPI_API_KEY=SerpApi_키
 export POSTGRES_PASSWORD=PostgreSQL_비밀번호
 export CASSANDRA_PASSWORD=Cassandra_비밀번호
+```
 
 Windows PowerShell에서는 다음처럼 설정합니다.
+```bash
 $env:OPENAI_API_KEY="발급받은_OpenAI_API_키"
 $env:SERPAPI_API_KEY="SerpApi_키"
 $env:POSTGRES_PASSWORD="PostgreSQL_비밀번호"
 $env:CASSANDRA_PASSWORD="Cassandra_비밀번호"
+```
 
 2. 프로젝트 실행
+```bash
 cd 프로젝트_폴더
 ./gradlew bootRun
+```
 
 Windows에서는 다음 명령을 사용합니다.
+```bash
 .\gradlew.bat bootRun
+```
 
 실행 후 브라우저에서 http://localhost:8080으로 접속합니다.
 
