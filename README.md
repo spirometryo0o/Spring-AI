@@ -32,9 +32,9 @@ flowchart LR
     S --> O[OpenAI API]
     S --> V[PostgreSQL + PGVector]
     S --> C[Cassandra Chat Memory]
-    S --> M[MCP Server<br/>SSE / stdio]
+    S --> M[MCP Server - SSE / stdio]
     S --> A[External Search API]
-
+```
 
 ## 실행 방법
 1. 환경 변수 설정
@@ -59,8 +59,7 @@ Windows에서는 다음 명령을 사용합니다.
 실행 후 브라우저에서 http://localhost:8080으로 접속합니다.
 
 
-##
-환경 변수
+## 환경 변수
 변수명	설명	필요한 프로젝트
 OPENAI_API_KEY	OpenAI API 키	전체 AI 기능
 SERPAPI_API_KEY	웹·YouTube 검색 API 키	Agent, Tool Calling
