@@ -69,13 +69,15 @@ Windows에서는 다음 명령을 사용합니다.
 
 
 ## 환경 변수
-변수명	설명	필요한 프로젝트
-OPENAI_API_KEY	OpenAI API 키	전체 AI 기능
-SERPAPI_API_KEY	웹·YouTube 검색 API 키	Agent, Tool Calling
-POSTGRES_PASSWORD	PostgreSQL 비밀번호	RAG, PGVector, JDBC 메모리
-CASSANDRA_PASSWORD	Cassandra 비밀번호	Cassandra Chat Memory
 
+| 변수명 | 설명 | 필요한 프로젝트 |
+|---|---|---|
+| `OPENAI_API_KEY` | OpenAI API 키 | 전체 AI 기능 |
+| `SERPAPI_API_KEY` | 웹·YouTube 검색 API 키 | AI Agent, Tool Calling |
+| `POSTGRES_PASSWORD` | PostgreSQL 비밀번호 | RAG, PGVector, JDBC 메모리 |
+| `CASSANDRA_PASSWORD` | Cassandra 비밀번호 | Cassandra Chat Memory |
 
-API 키와 비밀번호는 GitHub에 업로드하지 않으며, 환경 변수로만 관리합니다.
+> API 키와 비밀번호는 GitHub에 업로드하지 않고 환경 변수로 관리합니다.
+
 
 
