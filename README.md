@@ -2,6 +2,7 @@
 
 Spring Boot와 Spring AI를 활용해 생성형 AI, RAG, 벡터 검색, 대화 메모리, MCP, AI Agent 기능을 구현한 실습·포트폴리오 프로젝트입니다.
 
+
 ## 주요 기능
 
 - OpenAI 기반 채팅 및 프롬프트 엔지니어링
@@ -10,6 +11,7 @@ Spring Boot와 Spring AI를 활용해 생성형 AI, RAG, 벡터 검색, 대화 �
 - JDBC·PGVector·Cassandra 기반 대화 메모리
 - MCP SSE / stdio 클라이언트·서버 연동
 - 외부 검색 도구를 호출하는 YouTube 검색 AI Agent
+
 
 ## 기술 스택
 
@@ -23,6 +25,7 @@ Spring Boot와 Spring AI를 활용해 생성형 AI, RAG, 벡터 검색, 대화 �
 - Thymeleaf
 - Gradle
 
+
 ## 아키텍처
 
 ```mermaid
@@ -35,6 +38,7 @@ flowchart LR
     S --> M[MCP Server - SSE / stdio]
     S --> A[External Search API]
 ```
+
 
 ## 실행 방법
 1. 환경 변수 설정
@@ -66,6 +70,7 @@ Windows에서는 다음 명령을 사용합니다.
 ```
 
 실행 후 브라우저에서 http://localhost:8080으로 접속합니다.
+
 
 
 ## 환경 변수
