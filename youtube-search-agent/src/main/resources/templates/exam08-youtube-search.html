@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Exam08 YouTube 검색 에이전트</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f6f8;
+            color: #222;
+            font-family: Arial, "Noto Sans KR", sans-serif;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 40px));
+            margin: 40px auto;
+        }
+
+        .logo {
+            margin-bottom: 18px;
+            color: #68a52c;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .header {
+            overflow: hidden;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .header-title {
+            padding: 16px 20px;
+            background: #181818;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .header-description {
+            padding: 18px 20px;
+            color: #666;
+        }
+
+        .search-panel {
+            margin-top: 20px;
+            padding: 22px;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .sample-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .sample-title {
+            margin-right: 5px;
+            font-weight: 700;
+        }
+
+        .sample-button {
+            padding: 9px 14px;
+            border: 1px solid #c7c7c7;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .sample-button:hover {
+            background: #f0f0f0;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        #question {
+            flex: 1;
+            min-height: 54px;
+            padding: 15px;
+            border: 1px solid #bbb;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        #searchButton {
+            width: 90px;
+            border: 0;
+            border-radius: 7px;
+            background: #111;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #searchButton:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .result-header {
+            margin: 24px 0 12px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .video-card {
+            overflow: hidden;
+            border: 1px solid #d1d1d1;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .video-title {
+            min-height: 68px;
+            padding: 16px;
+            background: #191919;
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .thumbnail-wrap {
+            aspect-ratio: 16 / 9;
+            background: #e9e9e9;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-empty {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+
+        .video-info {
+            padding: 16px;
+        }
+
+        .upload-date {
+            margin-bottom: 16px;
+            color: #666;
+        }
+
+        .button-row {
+            text-align: right;
+        }
+
+        .youtube-link {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 6px;
+            background: #111;
+            color: white;
+            text-decoration: none;
+        }
+
+        @media (max-width: 720px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            #searchButton {
+                width: 100%;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <div class="logo">spring AI</div>
+
+    <section class="header">
+        <div class="header-title">
+            Exam08: YouTube 검색 에이전트
+        </div>
+
+        <div class="header-description">
+            여행지나 관심사를 입력하면 관련 YouTube 영상을 검색해 추천합니다.
+        </div>
+    </section>
+
+    <section class="search-panel">
+
+        <div class="sample-row">
+            <span class="sample-title">샘플 질문:</span>
+
+            <button
+                    type="button"
+                    class="sample-button"
+                    data-question="제주도 여행 YouTube 영상 검색해줘">
+                제주도 여행
+            </button>
+
+            <button
+                    type="button"
+                    class="sample-button"
+                    data-question="부산 맛집 YouTube 영상 검색해줘">
+                부산 맛집
+            </button>
+
+            <button
+                    type="button"
+                    class="sample-button"
+                    data-question="서울 카페 투어 YouTube 영상 검색해줘">
+                서울 카페 투어
+            </button>
+        </div>
+
+        <div class="search-row">
+            <input
+                    id="question"
+                    type="text"
+                    placeholder="예: 부산 여행 YouTube 영상 검색해줘">
+
+            <button
+                    id="searchButton"
+                    type="button">
+                검색
+            </button>
+        </div>
+    </section>
+
+    <div
+            id="message"
+            class="message">
+    </div>
+
+    <section id="resultSection" hidden>
+        <div
+                id="resultHeader"
+                class="result-header">
+        </div>
+
+        <div
+                id="videoGrid"
+                class="video-grid">
+        </div>
+    </section>
+</main>
+
+<script>
+    const questionInput = document.getElementById("question");
+    const searchButton = document.getElementById("searchButton");
+    const message = document.getElementById("message");
+    const resultSection = document.getElementById("resultSection");
+    const resultHeader = document.getElementById("resultHeader");
+    const videoGrid = document.getElementById("videoGrid");
+
+    document.querySelectorAll(".sample-button").forEach(button => {
+        button.addEventListener("click", () => {
+            questionInput.value = button.dataset.question;
+            questionInput.focus();
+        });
+    });
+
+    searchButton.addEventListener("click", searchVideos);
+
+    questionInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            searchVideos();
+        }
+    });
+
+    async function searchVideos() {
+        const question = questionInput.value.trim();
+
+        if (!question) {
+            showMessage("검색할 내용을 입력해주세요.", true);
+            return;
+        }
+
+        setLoading(true);
+        hideMessage();
+
+        resultSection.hidden = true;
+        videoGrid.innerHTML = "";
+
+        try {
+            const response = await fetch("/exam08/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    question: question
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "검색 중 오류가 발생했습니다."
+                );
+            }
+
+            if (!Array.isArray(data) || data.length === 0) {
+                showMessage("검색된 YouTube 영상이 없습니다.", false);
+                return;
+            }
+
+            resultHeader.textContent = `검색 결과: ${question}`;
+
+            data.forEach(video => {
+                videoGrid.appendChild(createVideoCard(video));
+            });
+
+            resultSection.hidden = false;
+
+        } catch (error) {
+            showMessage(error.message, true);
+
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function createVideoCard(video) {
+        const card = document.createElement("article");
+        card.className = "video-card";
+
+        const title = document.createElement("div");
+        title.className = "video-title";
+        title.textContent = video.title || "제목 없음";
+
+        const thumbnailWrap = document.createElement("div");
+        thumbnailWrap.className = "thumbnail-wrap";
+
+        if (video.thumbnail) {
+            const thumbnail = document.createElement("img");
+
+            thumbnail.className = "thumbnail";
+            thumbnail.src = video.thumbnail;
+            thumbnail.alt = `${video.title || "YouTube 영상"} 썸네일`;
+
+            thumbnail.addEventListener("error", () => {
+                thumbnailWrap.innerHTML =
+                    '<div class="thumbnail-empty">이미지를 불러올 수 없습니다.</div>';
+            });
+
+            thumbnailWrap.appendChild(thumbnail);
+
+        } else {
+            thumbnailWrap.innerHTML =
+                '<div class="thumbnail-empty">썸네일 없음</div>';
+        }
+
+        const info = document.createElement("div");
+        info.className = "video-info";
+
+        const uploadDate = document.createElement("div");
+        uploadDate.className = "upload-date";
+        uploadDate.textContent =
+            `업로드: ${video.uploadDate || "정보 없음"}`;
+
+        const buttonRow = document.createElement("div");
+        buttonRow.className = "button-row";
+
+        const link = document.createElement("a");
+        link.className = "youtube-link";
+        link.href = video.link;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "유튜브에서 보기";
+
+        buttonRow.appendChild(link);
+        info.appendChild(uploadDate);
+        info.appendChild(buttonRow);
+
+        card.appendChild(title);
+        card.appendChild(thumbnailWrap);
+        card.appendChild(info);
+
+        return card;
+    }
+
+    function setLoading(loading) {
+        searchButton.disabled = loading;
+        questionInput.disabled = loading;
+        searchButton.textContent = loading ? "검색 중..." : "검색";
+    }
+
+    function showMessage(text, error) {
+        message.style.display = "block";
+        message.style.color = error ? "#b00020" : "#333";
+        message.textContent = text;
+    }
+
+    function hideMessage() {
+        message.style.display = "none";
+        message.textContent = "";
+    }
+</script>
+</body>
+</html>

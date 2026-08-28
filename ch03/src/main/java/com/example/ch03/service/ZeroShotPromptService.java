@@ -1,0 +1,43 @@
+package com.example.ch03.service;
+
+import java.util.Map;
+
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
+
+@Service
+public class ZeroShotPromptService {
+	
+	private ChatClient chatClient;
+	
+	public ZeroShotPromptService(ChatClient.Builder chatClientBuilder) {
+		chatClient = chatClientBuilder.build();
+	}
+	
+	private PromptTemplate promptTemplate = PromptTemplate.builder()
+			.template(
+			"""
+			영화 리뷰를 [긍정적, 중립적, 부정적] 중에서 하나로 분류해주세요.
+			레이블만 반환하세요.
+			리뷰: {review}
+			""")
+			.build();
+	
+	public String prompt(String review) {
+				
+		String answer = chatClient.prompt()				
+				.user(promptTemplate.render(Map.of("review", review)))
+				.call()
+				.content();
+		
+		return answer;
+	}
+	
+	
+}

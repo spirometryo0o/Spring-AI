@@ -1,1 +1,1 @@
-# Spring-AI
+# SpringAI
